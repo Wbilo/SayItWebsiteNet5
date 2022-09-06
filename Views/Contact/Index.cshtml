@@ -1,0 +1,89 @@
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model SayItWebsiteNet5.Models.Contact
+
+
+
+
+
+<div class="content">
+    <div>
+
+        <div class="staff">
+            <img class=staffpictures src="https://i.imgur.com/EM0AXhb.jpg" alt="wtf" width="100" height="100">
+            <h2>Gert:</h2>
+            <p>Telefonnummer:</p>
+            <p>Email:</p>
+            <p>Beskæftigelse:</p>
+        </div>
+
+        <div class="staff">
+            <img class=staffpictures src="https://i.imgur.com/EM0AXhb.jpg" alt="idk" width="100" height="100">
+            <h2>Tine:</h2>
+            <p>Telefonnummer:</p>
+            <p>Email:</p>
+            <p>Beskæftigelse:</p>
+        </div>
+
+        <div class="staff">
+            <img class=staffpictures src="https://i.imgur.com/EM0AXhb.jpg" alt="ffs" width="100" height="100">
+            <h2>Else:</h2>
+            <p>Telefonnummer:</p>
+            <p>Email:</p>
+            <p>Beskæftigelse:</p>
+        </div>
+    </div>
+</div>
+
+<h3>Skriv til os </h3>
+
+<div class="content2">
+    <form asp-action="Index">
+        <div>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="Information">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="Information">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="Information">
+                <label asp-for="PhoneNumber" class="control-label"></label>
+                <input asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="Message">
+            <div class="message3">
+                <label asp-for="Message" class="control-label"></label>
+            </div>
+            <textarea class="Message2" asp-for="Message"></textarea>
+
+        </div>
+        <input type="submit" class="btn btn-primary" style="margin-left:612px;" asp-controller="Contact" asp-action="SendEmail" value="Send" />
+
+    </form>
+</div>
+
+
+
+
+<div class="address">
+    <p>
+        <b>Adresse for kompetencehuset:</b>
+        <br />
+
+        <em>
+            Søren Frichs Vej 40 D
+
+            8230 Åbyhøj
+        </em>
+    </p>
+</div>

@@ -1,0 +1,109 @@
+﻿@model SayItWebsiteNet5.Models.Student
+@{
+    ViewData["Title"] = $"{Model.Name.ToString()} {Model.Surname.ToString()} Overblik";
+}
+
+<h1>Elev Overblik</h1>
+
+@Html.DisplayNameFor(model => model.Name):  @Html.DisplayFor(model => model.Name)
+<br />
+@Html.DisplayNameFor(model => model.Surname):  @Html.DisplayFor(model => model.Surname)
+<br />
+@Html.DisplayNameFor(model => model.EnrollmentCreated): @Model.EnrollmentCreated.ToShortDateString()
+<br />
+
+<script type="text/javascript" src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+
+<script type="text/javascript">
+
+    window.onload = function() {
+        console.log(@Html.Raw(Json.Serialize(@ViewBag.dataPoints)));
+        var chart = new CanvasJS.Chart("chartContainer", {
+            theme: "light2",
+            title: {
+                text: "Fraværs Koefficient"
+            },
+            data: [{
+                type: "line",
+                dataPoints: @Html.Raw(Json.Serialize(@ViewBag.dataPoints)),
+                toolTipContent: "{tooltip}"
+            }],
+            axisY: {
+                minimum: 0,
+                maximum: 100
+            },
+        });
+
+        chart.render();
+        document.getElementById("printChart").addEventListener("click", function() {
+            chart.print();
+        });
+    }
+
+</script>
+
+<div id="chartContainer" style="height: 275px; width: 100%;"></div>
+<div>
+    <button id="printChart">Udskriv Graf</button>
+</div>
+
+<div>
+    <br />
+    <h3>Igangværende Projekter:</h3>
+    @{
+        foreach (var project in ViewBag.ProjectCollection)
+        {
+            <a asp-controller="Project" asp-action="MyProjects" asp-route-id="@project.Id.ToString()">@project.Title  ||</a>
+        }
+    }
+
+</div>
+
+
+<div style="margin-top:25px;">
+    <h3>Elev Noter</h3>
+    <form asp-action="AddNote">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group" style="width:400px;">
+            <textarea class="form-control" name="Message"></textarea>
+            <input type="submit" class="btn btn-primary" value="Tilføj Note" asp-action="AddNote" asp-route-id="@Model._Id" />
+        </div>
+    </form>
+</div>
+
+
+
+<div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    <p> Dato</p>
+                </th>
+                <th>
+                    <p> Note</p>
+                </th>
+                <th>
+
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Notes)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Message)
+                    </td>
+                    <td>
+                        <a class="btn btn-primary" asp-action="DeleteNote" asp-controller="Student" asp-route-id="@Model._Id" asp-route-id2="@item.Id.ToString()"> Slet</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

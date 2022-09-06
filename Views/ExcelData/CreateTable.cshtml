@@ -1,0 +1,121 @@
+﻿@model SayItWebsiteNet5.Data.ExcelData
+@using SayItWebsiteNet5.Data
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $(".btnSubmit").click(function () {
+            $("input[name='GridHtml']").val($("#Grid").html());
+        });
+    });
+</script>
+@{ ViewData["Title"] = "Hent fraværsuge"; }
+
+<h1>Hent Fraværsuge</h1>
+
+<hr />
+<div class="row">
+
+    <div class="col-md-4">
+
+        <form asp-action="CreateTable">
+
+            <div class="form-group">
+
+                <div>
+
+                    <label> Ugenummer </label>
+
+                    <input asp-for="WeekNumber" />
+
+                </div>
+
+                <br />
+
+                <input type="submit" class="btn btn-primary" value="Hent ugeskema" asp-action="CreateTable" asp-route-id="WeekNumber" method="post" />
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+@{ if (Model != null)
+    {
+<div id="Grid">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Navn</th>
+                <th>@Html.DisplayNameFor(model => model.Monday)</th>
+                <th>@Html.DisplayNameFor(model => model.Tuesday)</th>
+                <th>@Html.DisplayNameFor(model => model.Thursday)</th>
+                <th>@Html.DisplayNameFor(model => model.Friday)</th>
+            </tr>
+        </thead>
+        <tbody>
+
+
+            @foreach (var item in Model.studData2)
+            {
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.Stud.Name)
+    </td>
+    <td>
+        @if (item.Monday != null)
+        {
+@if (item.Monday.Note != null)
+{<p>@item.Monday.Note</p>}
+else
+{ @Html.DisplayFor(modelItem => item.Monday.Present)} }
+
+else
+{ @Html.DisplayFor(modelItem => item.Monday.Present)}
+
+    </td>
+    <td>
+        @if (item.Tuesday != null)
+        {
+@if (item.Tuesday.Note != null)
+{<p>@item.Tuesday.Note</p>}
+else
+{ @Html.DisplayFor(modelItem => item.Tuesday.Present)} }
+else
+{ @Html.DisplayFor(modelItem => item.Tuesday.Present)}
+    </td>
+    <td>
+        @if (item.Thursday != null)
+        {
+@if (item.Thursday.Note != null)
+{<p>@item.Thursday.Note</p>}
+else
+{ @Html.DisplayFor(modelItem => item.Thursday.Present)} }
+else
+{ @Html.DisplayFor(modelItem => item.Thursday.Present)}
+    </td>
+    <td>
+        @if (item.Friday != null)
+        {
+@if (item.Friday.Note != null)
+{<p>@item.Friday.Note</p>}
+else
+{ @Html.DisplayFor(modelItem => item.Friday.Present)} }
+else
+{ @Html.DisplayFor(modelItem => item.Friday.Present)}
+    </td>
+
+</tr>}
+        </tbody>
+
+    </table>
+</div>} }
+<form asp-action="Export" asp-controller="ExcelData" method="post">
+    <input type="hidden" name="GridHtml" />
+    <input type="submit" value="Export" class="btnSubmit" />
+</form>
+
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

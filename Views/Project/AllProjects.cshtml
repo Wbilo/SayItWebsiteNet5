@@ -1,0 +1,96 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model IEnumerable<SayItWebsiteNet5.Models.Project>
+@inject UserManager<ApplicationUser> _userManager;
+
+@{
+    ViewData["Title"] = "MyProjects";
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Active)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <a asp-action="GetProject" asp-route-id="@item.Id.ToString()"> @Html.DisplayFor(modelItem => item.Title)</a>
+                </td>
+                <td>
+                    <p>
+                        @{
+                            if (item.Active)
+                            {
+                                <span>Aktiv</span>
+                            }
+                            else
+                            {
+                                <span>Inaktiv</span>
+                            }
+                        }
+                    </p>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+
+                    @if (User?.Identity.IsAuthenticated ?? false)
+                    {
+                        if (item.Participants.Any(x => x._Id.ToString() == _userManager.GetUserId(User)))
+                        {
+                            <a class="btn btn-primary" asp-action="UnSubscribeProject" asp-route-id="@item.Id">Afmeld</a>
+                        }
+                        else
+                        {
+                            <a class="btn btn-primary" asp-action="SubscribeProject" asp-route-id="@item.Id">Tilmeld</a>
+                        }
+                    }
+                    else
+                    {
+                        <div>
+                            <span>Log på for tilmelde</span>
+                            <button type="button" onclick="location.href='@Url.Action("Login","Account")'"> Login</button>
+
+                        </div>
+                    }
+                    @if (User?.Identity.IsAuthenticated ?? false)
+                    {
+                        @if (User.IsInRole("Admin") || item.Owner._Id.ToString() == _userManager.GetUserId(User))
+                        {
+                            <span class="text-danger"> @Html.ValidationMessage("DeleteProjectError") </span>
+                            <button class="btn btn-primary" type="submit" value="@item.Id.ToString()" onclick="myFunction(this)">Slet</button>
+
+                        }
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a class="btn btn-primary" asp-action="MyProjects">Mine Projekter</a>
+
+
+<script>
+    function myFunction(obj) {
+        let text = "Ønsker du at slette projektet? \n OK for at bekræfte.";
+        if (confirm(text) == true)
+            window.location.href = '@Url.Action("DeleteProject","Project")/' + obj.value;
+
+    }
+</script>

@@ -1,0 +1,37 @@
+﻿@using SayItWebsiteNet5.Data
+@using SayItWebsiteNet5.Models
+@model SayItWebsiteNet5.Models.Protocol
+
+
+<form asp-action="TakeProtocol">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    @Html.DisplayNameFor(Model => Model.Date)
+
+    <input type="date" asp-for="@Model.Date" value="@Model.Date.ToShortDateString()">
+    @foreach (var item in Model.StudentProtocol)
+    {
+
+<div class="form-group">
+    <label>@item.Value.StudentData.Name @item.Value.StudentData.Surname</label>
+    <label>Fremmødt</label>
+    <input type="checkbox" asp-for="@Model.StudentProtocol[item.Key].Present">
+    <input asp-for="@Model.StudentProtocol[item.Key].Note">
+
+
+    <input type="hidden" asp-for="@Model.StudentProtocol[item.Key].StudentData.Name" value="@item.Value.StudentData.Name">
+    <input type="hidden" asp-for="@Model.StudentProtocol[item.Key].StudentData.Surname" value="@item.Value.StudentData.Surname">
+    <input type="hidden" asp-for="@Model.StudentProtocol[item.Key].StudentData.EnrollmentCreated" value="@item.Value.StudentData.EnrollmentCreated">
+    <input type="hidden" asp-for="@Model.StudentProtocol[item.Key].StudentData.DaysTotal" value="@item.Value.StudentData.DaysTotal">
+    <input type="hidden" asp-for="@Model.StudentProtocol[item.Key].StudentData.AbsentDaysTotal" value="@item.Value.StudentData.AbsentDaysTotal">
+    <input type="hidden" asp-for="@Model.StudentProtocol[item.Key].StudentData.Absence" value="@item.Value.StudentData.Absence">
+    <input type="hidden" asp-for="@Model.StudentProtocol[item.Key].StudentData.Notes" value="@item.Value.StudentData.Notes">
+    <input type="hidden" asp-for="@Model.StudentProtocol[item.Key].StudentData.Roles" value="@item.Value.StudentData.Roles">
+    <input type="hidden" asp-for="@Model.StudentProtocol[item.Key].StudentData.Active" value="@item.Value.StudentData.Active">
+    <input type="hidden" asp-for="@Model.StudentProtocol[item.Key].StudentData.ActiveEvents" value="@item.Value.StudentData.ActiveEvents">
+    <input type="hidden" asp-for="@Model.StudentProtocol[item.Key].StudentData._Id" value="@item.Value.StudentData._Id">
+
+</div>}
+    <input type="submit" class="btn btn-primary" value="Opret" />
+</form>
+
+

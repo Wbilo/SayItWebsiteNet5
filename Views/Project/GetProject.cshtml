@@ -1,0 +1,71 @@
+﻿@model SayItWebsiteNet5.Models.Project
+@using Microsoft.AspNetCore.Identity;
+@inject UserManager<ApplicationUser> _userManager; 
+
+@{
+    ViewData["Title"] = "GetProject";
+}
+
+<h1>@Html.DisplayNameFor(model => model.Title)</h1>
+<hr />
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Active)
+        </dt>
+        <dd class="col-sm-10">
+            @{
+                if (Model.Active)
+                {
+                    <p>Aktiv</p>
+                }
+                else
+                {
+                    <p>Inaktiv</p>
+                }
+            }
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        @if (User.IsInRole("Admin") || Model.Owner._Id.ToString() == _userManager.GetUserId(User))
+        {
+            <dt class="col-sm-2">
+                Skift status
+            </dt>
+            <dd class="col-sm-10">
+                <button class="btn-primary" type="submit" value="@Model.Id" onclick="myFunction(this)">Skift status</button>
+            </dd>
+        }
+    </dl>
+</div>
+<div>
+
+
+    <p> Medvirkende:</p>
+    @{
+        foreach (var par in Model.Participants)
+        {
+
+            <a asp-controller="Student" asp-action="GetStudent" asp-route-id="@par._Id">@par.Name</a>
+
+            <br />
+        }
+    }
+
+</div>
+
+
+
+
+<script>
+    function myFunction(obj) {
+        let text = "Ønsker du at skifte projektets status? \n OK for at bekræfte.";
+        if (confirm(text) == true)
+            window.location.href = '@Url.Action("ChangeStatus","Project")/' + obj.value;
+
+    }
+</script>

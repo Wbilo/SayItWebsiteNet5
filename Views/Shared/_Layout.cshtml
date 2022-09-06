@@ -1,0 +1,155 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - SayITWebsite</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/SayITWebsite.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+
+        <div class="sidenav col-3">
+            <a asp-controller="Home" asp-action="Index">Forside</a>
+
+            <button class="dropdown-btn">
+                Projekter
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdowncontainer">
+                <a asp-controller="Project" asp-action="Create">Opret et projekt</a>
+                <a asp-controller="Project" asp-action="AllProjects">Alle Projekter</a>
+            </div>
+
+
+
+            <button class="dropdown-btn">
+                Events
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdowncontainer">
+                <a asp-controller="SIEvents" asp-action="Create">Opret Event</a>
+                <a asp-controller="SIEvents" asp-action="Index">Liste over kommende events</a>
+                @if (User?.Identity.IsAuthenticated ?? false)
+                {
+    <a asp-controller="SIEvents" asp-action="MyEvents"> Mine Events</a>}
+
+            </div>
+            <div>
+                <a asp-controller="Contact" asp-action="Index">Kontakt</a>
+            </div>
+            <br />
+            <br />
+            <br />
+            <br />
+
+            @{ if (User?.Identity.IsAuthenticated ?? false)
+                            {
+                                if (User.IsInRole("Admin"))
+                                {
+                <p style="margin-left:10px;">Admin Menu</p>
+
+                                    <button class="dropdown-btn">
+                                        Elever
+                                        <i class="fa fa-caret-down"></i>
+                                    </button>
+                                                        <div class="dropdowncontainer">
+                                                            <a asp-controller="Student" asp-action="Index">Alle Elever</a>
+                                                            <a asp-controller="Student" asp-action="ActiveStudents">Aktive Elever</a>
+                                                            <a asp-controller="User" asp-action="Create">Opret Elev</a>
+                                                        </div>
+
+                                                                            <button class="dropdown-btn">
+                                                                                Protokol
+                                                                                <i class="fa fa-caret-down"></i>
+                                                                            </button>
+                                                                                                <div class="dropdowncontainer">
+                                                                                                    <a asp-controller="Protocol" asp-action="Index">Liste af protokolerne</a>
+                                                                                                    <a asp-controller="Protocol" asp-action="TakeProtocol">Tag Protokol</a>
+                                                                                                </div>
+
+                                                                                                                    <button class="dropdown-btn">
+                                                                                                                        Admin ting
+                                                                                                                        <i class="fa fa-caret-down"></i>
+                                                                                                                    </button>
+                                                                                                                                        <div class="dropdowncontainer">
+
+                                                                                                                                            <a asp-controller="User" asp-action="CreateRole">Opret Rolle</a>
+                                                                                                                                            <a asp-controller="ExcelData" asp-action="CreateTable">Se Tabel oversigt</a>
+                                                                                                                                        </div> }
+                                                                                                                                                    } }
+
+
+            @if (User?.Identity.IsAuthenticated ?? false)
+            {
+<div class="bruger">
+    <p style="margin-left:10px;"> Bruger: @User.Identity.Name</p>
+
+
+
+    <p></p>
+    <a asp-controller="Account" asp-action="Logout" class="btn btn-danger">Log Ud</a>
+</div> }
+            else
+            {
+<div class="bruger">
+    <a asp-controller="Account" asp-action="Login" class="btn btn-primary">Login</a>
+</div>            }
+
+
+
+
+        </div>
+
+    </header>
+    <div class="container col-6">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+
+
+
+
+
+
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment.min.js"></script>
+
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2022 - SayITWebsite - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+
+
+
+
+    <script>
+        /* Loop through all dropdown buttons to toggle between hiding and showing its dropdown content - This allows the user to have multiple dropdowns without any conflict */
+        var dropdown = document.getElementsByClassName("dropdown-btn");
+        var i;
+
+        for (i = 0; i < dropdown.length; i++) {
+            dropdown[i].addEventListener("click", function () {
+                this.classList.toggle("active");
+                var dropdownContent = this.nextElementSibling;
+                if (dropdownContent.style.display === "block") {
+                    dropdownContent.style.display = "none";
+                } else {
+                    dropdownContent.style.display = "block";
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,44 @@
+﻿@model IEnumerable<SayItWebsiteNet5.Models.Protocol>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+<p>
+
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+               <a asp-action="DetailsProtocol" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Date)</a> 
+            </td>
+            <td>
+                 <button class="btn btn-primary" type="submit" value="@item.Id" onclick="myFunction(this)">Slet</button>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+    <a class="btn btn-primary" asp-action="TakeProtocol">Tag ny protokol</a>
+
+    
+    <script>
+        function myFunction(obj) {
+            let text = "Ønsker du at slette Protokolen? \n OK for at bekræfte.";
+            if (confirm(text) == true)
+                window.location.href = '@Url.Action("DeleteProtocol","Protocol")/' + obj.value;
+            
+        }
+    </script>

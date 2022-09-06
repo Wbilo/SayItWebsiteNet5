@@ -1,0 +1,75 @@
+﻿@model IEnumerable<SayItWebsiteNet5.Models.Protocol>
+
+@{
+    ViewData["Title"] = "DetailsProtocol";
+}
+
+<h1>Protokol for </h1>
+<h2>
+    @foreach (var x in Model)
+    {
+        @x.Date.ToShortDateString()
+    }
+</h2>
+<div>
+    <hr />
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    <p> Navn</p>
+                </th>
+                <th>
+                    <p> Note</p>
+                </th>
+                <th>
+                    <p> Fremmødt</p>
+                </th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+
+                
+                        @foreach (var thing in item.StudentProtocol)
+                        {
+                    <tr>
+                        <td>
+                                @thing.Value.StudentData.Name
+                        </td>
+                        <td>
+                                    @if (thing.Value.Note == null)
+                                    {
+                                <p> Ingen Note</p>
+                                    }
+                                    else
+                                    {
+                                <p>@thing.Value.Note</p>
+                                    }
+
+                        </td>
+                        <td>
+                                    @if(thing.Value.Present) {<p> Fremmødt</p>}
+                                    else { <p> Ikke fremmødt</p>}
+                        </td>
+                    </tr>
+                        }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <a style="margin-left:5px" asp-action="Index">Back to List</a>
+    @foreach(var x in Model)
+    {
+    <a style="margin-left:950px" asp-action="EditProtocol" asp-route-id="@x.Id">Ændre </a>
+    }
+</div>
+
+

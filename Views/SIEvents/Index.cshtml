@@ -1,0 +1,106 @@
+﻿@model IEnumerable<SayItWebsiteNet5.Models.SIEvents>
+@using Microsoft.AspNetCore.Identity;
+@inject UserManager<ApplicationUser> _userManager;
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+
+    <table>
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Title)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Date)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Location)
+                </th>
+                <th>
+                    Tilmeld
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <a asp-action="DetailedEvent" asp-route-id="@item.Id"> @Html.DisplayFor(modelItem => item.Title)</a>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Location)
+                    </td>
+                    <td>
+
+                        @if (User?.Identity.IsAuthenticated ?? false)
+                        {
+                            if(item.Participants.Any(x => x._Id.ToString() == _userManager.GetUserId(User)))
+                            {
+                                <a class="btn btn-primary" asp-action="UnSubscribeEvent" asp-route-id="@item.Id">Afmeld</a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-primary" asp-action="SubscribeEvent" asp-route-id="@item.Id">Tilmeld</a>
+
+                            }
+
+                        }
+                        else
+                        {
+                            <div>
+                                <span>Log på for tilmelde</span>
+                                <button type="button" onclick="location.href='@Url.Action("Login","Account")'"> Login</button>
+
+                            </div>
+                        }
+                        @if (User?.Identity.IsAuthenticated ?? false)
+                        {
+                            @if (User.IsInRole("Admin") || item.Creator == _userManager.GetUserId(User))
+                            {
+                                <span class="text-danger"> @Html.ValidationMessage("DeleteEventError") </span>
+                                <button class="btn btn-primary" type="submit" value="@item.Id" onclick="myFunction(this)">Slet</button>
+
+                            }
+                        }
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+     
+    <script>
+        function myFunction(obj) {
+            let text = "Ønsker du at slette eventet? \n OK for at bekræfte.";
+            if (confirm(text) == true)
+                window.location.href = '@Url.Action("DeleteEvent","SIEvents")/' + obj.value;
+            
+        }
+    </script>
+</body>
+
+
+</html>
+
+
+
+
+<!-- <a class="btn btn-primary" asp-action="DeleteEvent" asp-route-id="item.Id">Slet</a>-->
